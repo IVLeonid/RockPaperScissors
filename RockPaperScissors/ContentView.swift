@@ -1,24 +1,36 @@
-//
-//  ContentView.swift
-//  RockPaperScissors
-//
-//  Created by Леонід Іванов on 25.03.2026.
-//
-
 import SwiftUI
 
 struct ContentView: View {
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        NavigationStack {
+            
+            ZStack {
+                VStack {
+                    VStack {
+                        //hint from app
+                        //some spacer()?
+                        //choice from app
+                    }
+                    
+                    VStack {
+                        //choice from app (image or icon)
+                        //choice from user
+                    }
+                    
+                    VStack {
+                        HStack {
+                            //buttoms with choicing from user
+
+                        }
+                    }
+                }
+                //notification of loss or win on all screen
+            }
+
         }
-        .padding()
     }
 }
-
 #Preview {
     ContentView()
 }
