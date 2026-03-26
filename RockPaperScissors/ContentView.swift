@@ -2,17 +2,17 @@ import SwiftUI
 
 struct ContentView: View {
     var gameElements = ["rock", "scissors", "paper"]
-    @State var chooseOfApp = ""
-    @State var chooseOfUser = ""
+    @State private var chooseOfApp = ""
+    @State private var chooseOfUser = ""
+    @State private var stateOfGameGoal = Bool.random()
     
-    //alerts
-    @State var win = false
-    @State var lose = false
-    @State var draw = false
+    //alert
+    @State private var scoreTitle = ""
+    @State private var showingScore = false
     
     //points' and games' counter
-    @State var counter: Int = 0
-    @State var games: Int = 0
+    @State private var counter: Int = 0
+    @State private var games: Int = 0
     
     
     
@@ -21,29 +21,41 @@ struct ContentView: View {
             ZStack {
                 VStack {
                     VStack {
-                        //hint from app
-                        //some spacer()?
-                        //choice from app
+                        Text(gameGoal())
                     }
                     
                     VStack {
-                        //choice from app (image or icon)
-                        //choice from user
+                        Spacer()
+                        Text(chooseOfApp)
+                        Text(chooseOfUser)
+                        Spacer()
+                    }
+                    .onAppear {
+                        chooseRandomElement()
                     }
                     
                     VStack {
                         HStack {
-                            //buttoms with choicing from user
+                            buttonsStyle
                             
                         }
                     }
                 }
-                //notification of loss or win on all screen
             }
-            
+            .alert(scoreTitle, isPresented: $showingScore) {
+                Button("Continue") {
+                    chooseRandomElement()
+                    stateOfGameGoal.toggle()
+                    chooseOfUser = ""
+                }
+            }
         }
     }
     
+    
+    func gameGoal() -> String {
+        stateOfGameGoal ? "You can Win" : "You can Lose"
+    }
     func chooseRandomElement() {
         chooseOfApp = gameElements.randomElement() ?? "rock"
     }
@@ -52,28 +64,55 @@ struct ContentView: View {
     }
     func winningLogic() {
         if chooseOfUser == chooseOfApp {
-            draw = true
+            scoreTitle = "It's a draw!"
+            showingScore = true
         } else if chooseOfUser == "rock" && chooseOfApp == "scissors" {
-            win = true
+            scoreTitle = "You won!"
+            showingScore = true
         } else if chooseOfUser == "scissors" && chooseOfApp == "paper" {
-            win = true
+            scoreTitle = "You won!"
+            showingScore = true
         } else if chooseOfUser == "paper" && chooseOfApp == "rock" {
-            win = true
+            scoreTitle = "You won!"
+            showingScore = true
         } else {
-            lose = true
+            scoreTitle = "You lost!"
+            showingScore = true
         }
     }
     func losingLogic() {
         if chooseOfUser == chooseOfApp {
-            draw = true
+            scoreTitle = "It's a draw!"
+            showingScore = true
         } else if chooseOfApp == "rock" && chooseOfUser == "scissors" {
-            win = true
+            scoreTitle = "You won!"
+            showingScore = true
         } else if chooseOfApp == "scissors" && chooseOfUser == "paper" {
-            win = true
+            scoreTitle = "You won!"
+            showingScore = true
         } else if chooseOfApp == "paper" && chooseOfUser == "rock" {
-            win = true
+            scoreTitle = "You won!"
+            showingScore = true
         } else {
-            lose = true
+            scoreTitle = "You lost!"
+            showingScore = true
+        }
+    }
+    
+    var buttonsStyle: some View {
+        ForEach(gameElements, id: \.self) { element in
+            Button {
+                chooseOfUser = element
+                stateOfGameGoal ? winningLogic() : losingLogic()
+            } label: {
+                Text(element)
+                    .padding(30)
+                    .background(.black.gradient)
+                    .opacity(0.8)
+                    .clipShape(.circle)
+                    .bold()
+                    .foregroundColor(.white)
+            }
         }
     }
     
